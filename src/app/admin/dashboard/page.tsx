@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link';
 
 const GOLD = '#D4AF37';
 const GREEN_DARK = '#0a3d2b';
@@ -160,9 +161,9 @@ export default function DashboardPage() {
           <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: 0 }}>
             Đơn hàng gần đây
           </h4>
-          <button style={{ color: GOLD, fontSize: '12px', fontWeight: '700', background: 'none', border: 'none', cursor: 'pointer' }}>
-            Xem tất cả
-          </button>
+          <Link href="/admin/orders" style={{ color: GOLD, fontSize: '12px', fontWeight: '700', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+            Xem tất cả →
+          </Link>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>

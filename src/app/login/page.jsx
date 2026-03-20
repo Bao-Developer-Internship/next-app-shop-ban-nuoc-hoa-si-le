@@ -124,39 +124,36 @@ export default function LoginPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '1.5rem 1.5rem',
+          padding: '1.25rem 1.5rem',
         }}>
+          {/* Logo */}
           <Link href="/" style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
+            gap: '10px',
             textDecoration: 'none'
           }}>
-            <div style={{ color: '#d4af37' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.25rem' }}>storm</span>
-            </div>
+            <div style={{
+              width: '38px', height: '38px', borderRadius: '50%',
+              background: '#d4af37', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', color: '#0a1a14',
+              fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '700',
+              flexShrink: 0,
+            }}>L</div>
             <h2 style={{
               color: '#d4af37',
               fontFamily: 'Playfair Display, serif',
-              fontSize: '1.5rem',
+              fontSize: '1.25rem',
               fontWeight: 'bold',
-              letterSpacing: '0.1em',
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
               margin: 0
             }}>
               Luxe Scent
             </h2>
           </Link>
-          <div style={{ display: 'none' }} className="md:block">
-            <p style={{
-              color: '#94a3b8',
-              fontSize: '0.875rem',
-              fontStyle: 'italic',
-              margin: 0
-            }}>
-              The Art of Fragrance
-            </p>
-          </div>
+
+
         </header>
 
         {/* Main Content */}

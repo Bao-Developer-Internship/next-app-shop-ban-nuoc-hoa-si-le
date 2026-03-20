@@ -6,9 +6,9 @@ const menuItems = [
   { href: '/admin/dashboard', icon: 'dashboard', label: 'Dashboard' },
   { href: '/admin/orders', icon: 'shopping_bag', label: 'Đơn hàng' },
   { href: '/admin/customers', icon: 'group', label: 'Khách hàng' },
-  { href: '/admin/collections', icon: 'auto_awesome_motion', label: 'Bộ sưu tập' },
   { href: '/admin/products', icon: 'inventory_2', label: 'Sản phẩm' },
-  { href: '/admin/settings', icon: 'settings', label: 'Cài đặt' },
+  { href: '/admin/collections', icon: 'auto_awesome_motion', label: 'Bộ sưu tập' },
+  { href: '/admin/settings', icon: 'manage_accounts', label: 'Nhân viên' },
 ];
 
 export default function Sidebar() {
@@ -16,8 +16,8 @@ export default function Sidebar() {
 
   return (
     <aside style={{
-      width: '288px',
-      minWidth: '288px',
+      width: '240px',
+      minWidth: '240px',
       height: '100vh',
       position: 'sticky',
       top: 0,
@@ -25,29 +25,29 @@ export default function Sidebar() {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      paddingTop: '32px',
-      paddingBottom: '32px',
+      paddingTop: '28px',
+      paddingBottom: '28px',
       borderRight: '1px solid rgba(212,175,55,0.2)',
     }}>
       <div>
         {/* Logo */}
-        <div style={{ padding: '0 32px', marginBottom: '48px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ padding: '0 24px', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
-              width: '40px', height: '40px', borderRadius: '50%',
+              width: '38px', height: '38px', borderRadius: '50%',
               backgroundColor: '#D4AF37', display: 'flex', alignItems: 'center',
               justifyContent: 'center', color: '#0a3d2b',
-              fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: '700',
+              fontFamily: "'Playfair Display', serif", fontSize: '18px', fontWeight: '700',
             }}>L</div>
             <div>
               <div style={{
-                fontFamily: 'Playfair Display, serif', fontSize: '18px',
-                letterSpacing: '0.15em', color: '#D4AF37', textTransform: 'uppercase', fontWeight: '700',
+                fontFamily: "'Playfair Display', serif", fontSize: '16px',
+                letterSpacing: '0.12em', color: '#D4AF37', textTransform: 'uppercase', fontWeight: '700',
               }}>Luxe Scent</div>
               <div style={{
-                fontSize: '9px', letterSpacing: '0.2em',
+                fontSize: '9px', letterSpacing: '0.18em',
                 color: 'rgba(212,175,55,0.6)', textTransform: 'uppercase',
-              }}>Management</div>
+              }}>Quản lý</div>
             </div>
           </div>
         </div>
@@ -61,8 +61,10 @@ export default function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={`sidebar-link${isActive ? ' active' : ''}`}>
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <span style={{ fontSize: '14px', fontWeight: '500', letterSpacing: '0.02em' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>
+                  {item.icon}
+                </span>
+                <span style={{ fontSize: '13px', fontWeight: '500', letterSpacing: '0.02em' }}>
                   {item.label}
                 </span>
               </Link>
@@ -72,10 +74,10 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom Button */}
-      <div style={{ padding: '0 24px' }}>
+      <div style={{ padding: '0 20px' }}>
         <button className="new-product-btn">
-          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add</span>
-          Sản phẩm mới
+          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
+          Thêm sản phẩm
         </button>
       </div>
     </aside>

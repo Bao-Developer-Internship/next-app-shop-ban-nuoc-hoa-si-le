@@ -11,9 +11,12 @@ module.exports = {
     extend: {
       colors: {
         'primary': '#0a3d2b',
+        'gold': '#c5a059',
         'accent': '#d4af37',
         'background-light': '#f6f8f7',
-        'background-dark': '#0a1a14',
+        'background-dark': '#08120f',
+        'surface-dark': '#0e1a16',
+        'accent-dark': '#162b24',
       },
       fontFamily: {
         'display': ['Inter', 'sans-serif'],

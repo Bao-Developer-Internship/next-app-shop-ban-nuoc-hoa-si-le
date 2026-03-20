@@ -18,7 +18,10 @@ export default function LuxuryHeader() {
                         </div>
                         <div className="col-md-6 text-center text-md-end">
                             <span className="me-3">📞 1900-LUXE</span>
-                            <span>📧 hello@luxescent.vn</span>
+                            <span className="me-3">📧 hello@luxescent.vn</span>
+                            <Link href="/gopy" style={{color: 'rgba(255,255,255,0.85)', fontSize: '13px', textDecoration: 'none', borderLeft: '1px solid rgba(255,255,255,0.3)', paddingLeft: '12px'}}>
+                                💬 Góp ý
+                            </Link>
                         </div>
                     </div>
                 </div>

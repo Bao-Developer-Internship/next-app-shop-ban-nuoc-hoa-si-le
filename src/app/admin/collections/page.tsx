@@ -13,9 +13,9 @@ const seasonData: Record<string, {
     desc: 'Hương thơm nhẹ nhàng từ hoa cỏ và cam chanh, mang lại cảm giác tươi mới của buổi sáng đầu xuân.',
     img: 'https://images.unsplash.com/photo-1490750967868-88df5691cc5e?w=200&h=200&fit=crop',
     products: [
-      { badge: 'Best Seller', badgeColor: '#c5a059', name: 'Velvet Morning Mist', price: '2.400.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-      { badge: 'New', badgeColor: '#2563eb', name: 'Rose de Mai', price: '3.100.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Golden Amber', price: '2.750.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
+      { badge: 'Best Seller', badgeColor: '#c5a059', name: 'Velvet Morning Mist', price: '2.400.000đ', img: '/images/San-Pham/SP1.jpg' },
+      { badge: 'New', badgeColor: '#2563eb', name: 'Rose de Mai', price: '3.100.000đ', img: '/images/San-Pham/Sp5.jpg' },
+      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Golden Amber', price: '2.750.000đ', img: '/images/San-Pham/SP4.jpg' },
     ],
     stats: [
       { icon: 'analytics', label: 'Lượt xem', value: '12.840' },
@@ -30,9 +30,9 @@ const seasonData: Record<string, {
     desc: 'Hương biển mát lạnh, trái cây nhiệt đới và gỗ trắng — năng lượng của mùa hè rực rỡ.',
     img: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=200&h=200&fit=crop',
     products: [
-      { badge: 'Best Seller', badgeColor: '#c5a059', name: 'Ocean Breeze EDP', price: '2.800.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-      { badge: 'New', badgeColor: '#2563eb', name: 'Citrus Soleil', price: '1.950.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Tropical Mango Mist', price: '3.200.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
+      { badge: 'Best Seller', badgeColor: '#c5a059', name: 'Ocean Breeze EDP', price: '2.800.000đ', img: '/images/San-Pham/SP7.jpg' },
+      { badge: 'New', badgeColor: '#2563eb', name: 'Citrus Soleil', price: '1.950.000đ', img: '/images/San-Pham/SP3.jpg' },
+      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Tropical Mango Mist', price: '3.200.000đ', img: '/images/San-Pham/SP6.jpg' },
     ],
     stats: [
       { icon: 'analytics', label: 'Lượt xem', value: '9.210' },
@@ -47,9 +47,9 @@ const seasonData: Record<string, {
     desc: 'Hương gỗ ấm áp, lá khô và gia vị — gợi lên vẻ đẹp trầm mặc của những buổi chiều thu.',
     img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop',
     products: [
-      { badge: 'Signature', badgeColor: '#c5a059', name: 'Oud Wood Intense', price: '4.200.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-      { badge: 'New', badgeColor: '#d97706', name: 'Amber Noir', price: '3.500.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Spiced Cedar', price: '2.900.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
+      { badge: 'Signature', badgeColor: '#c5a059', name: 'Oud Wood Intense', price: '4.200.000đ', img: '/images/San-Pham/SP16.jpg' },
+      { badge: 'New', badgeColor: '#d97706', name: 'Amber Noir', price: '3.500.000đ', img: '/images/San-Pham/SP4.jpg' },
+      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Spiced Cedar', price: '2.900.000đ', img: '/images/San-Pham/SP6.jpg' },
     ],
     stats: [
       { icon: 'analytics', label: 'Lượt xem', value: '7.430' },
@@ -64,9 +64,9 @@ const seasonData: Record<string, {
     desc: 'Hương xạ hương, vani và gỗ tuyết tùng — ấm áp và sang trọng như những đêm đông lạnh giá.',
     img: 'https://images.unsplash.com/photo-1418985991508-e47386d96a71?w=200&h=200&fit=crop',
     products: [
-      { badge: 'Exclusive', badgeColor: '#c5a059', name: 'Midnight Velvet', price: '5.100.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Snow Cedar', price: '3.800.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-      { badge: 'New', badgeColor: '#6366f1', name: 'Vanilla Frost', price: '2.900.000đ', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
+      { badge: 'Exclusive', badgeColor: '#c5a059', name: 'Midnight Velvet', price: '5.100.000đ', img: '/images/San-Pham/SP8.jpg' },
+      { badge: 'Limited', badgeColor: '#94a3b8', name: 'Snow Cedar', price: '3.800.000đ', img: '/images/San-Pham/SP2.jpg' },
+      { badge: 'New', badgeColor: '#6366f1', name: 'Vanilla Frost', price: '2.900.000đ', img: '/images/San-Pham/SP12.jpg' },
     ],
     stats: [
       { icon: 'analytics', label: 'Lượt xem', value: '5.670' },

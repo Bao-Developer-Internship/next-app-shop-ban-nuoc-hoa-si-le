@@ -3,6 +3,8 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/store/authStore";
+import { Toaster } from "sonner";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -29,9 +31,18 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body className={`${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            {children}
+            <Toaster
+              position="top-right"
+              richColors
+              toastOptions={{
+                style: { fontFamily: 'Inter, sans-serif', fontSize: '14px' },
+              }}
+            />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

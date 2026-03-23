@@ -4,13 +4,13 @@ import ProductTable, { Product } from '@/components/admin/ProductTable';
 import SaveConfirmModal from '@/components/admin/SaveConfirmModal';
 
 const initialProducts: Product[] = [
-  { id: 1, brand: 'Maison Francis Kurkdjian', name: 'Baccarat Rouge 540 Extrait de Parfum', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '12.500.000đ', wholesalePrice: '9.850.000đ', stock: 42, status: 'Hiển thị', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-  { id: 2, brand: 'Tom Ford', name: 'Oud Wood Intense', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '9.200.000đ', wholesalePrice: '7.100.000đ', stock: 8, status: 'Hiển thị', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-  { id: 3, brand: 'Creed', name: 'Aventus For Men', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '8.500.000đ', wholesalePrice: '6.400.000đ', stock: 124, status: 'Ẩn', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
-  { id: 4, brand: 'Le Labo', name: 'Santal 33', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '7.800.000đ', wholesalePrice: '5.900.000đ', stock: 'Hết hàng', status: 'Hiển thị', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
-  { id: 5, brand: 'Chanel', name: 'Bleu de Chanel Parfum', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '6.200.000đ', wholesalePrice: '4.800.000đ', stock: 67, status: 'Hiển thị', img: 'https://fimgs.net/mdimg/perfume/375x500.48156.jpg' },
-  { id: 6, brand: 'Dior', name: 'Sauvage Elixir', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '5.900.000đ', wholesalePrice: '4.500.000đ', stock: 33, status: 'Hiển thị', img: 'https://fimgs.net/mdimg/perfume/375x500.33452.jpg' },
-  { id: 7, brand: 'Byredo', name: 'Bal d\'Afrique', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '7.100.000đ', wholesalePrice: '5.500.000đ', stock: 19, status: 'Ẩn', img: 'https://fimgs.net/mdimg/perfume/375x500.25889.jpg' },
+  { id: 1, brand: 'Maison Francis Kurkdjian', name: 'Baccarat Rouge 540 Extrait de Parfum', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '12.500.000đ', wholesalePrice: '9.850.000đ', stock: 42, status: 'Hiển thị', img: '/images/San-Pham/SP9.jpg' },
+  { id: 2, brand: 'Tom Ford', name: 'Oud Wood Intense', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '9.200.000đ', wholesalePrice: '7.100.000đ', stock: 8, status: 'Hiển thị', img: '/images/San-Pham/SP16.jpg' },
+  { id: 3, brand: 'Creed', name: 'Aventus For Men', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '8.500.000đ', wholesalePrice: '6.400.000đ', stock: 124, status: 'Ẩn', img: '/images/San-Pham/SP15.jpg' },
+  { id: 4, brand: 'Le Labo', name: 'Santal 33', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '7.800.000đ', wholesalePrice: '5.900.000đ', stock: 'Hết hàng', status: 'Hiển thị', img: '/images/San-Pham/SP10.jpg' },
+  { id: 5, brand: 'Chanel', name: 'Bleu de Chanel Parfum', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '6.200.000đ', wholesalePrice: '4.800.000đ', stock: 67, status: 'Hiển thị', img: '/images/San-Pham/SP2.jpg' },
+  { id: 6, brand: 'Dior', name: 'Sauvage Elixir', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '5.900.000đ', wholesalePrice: '4.500.000đ', stock: 33, status: 'Hiển thị', img: '/images/San-Pham/SP11.jpg' },
+  { id: 7, brand: 'Byredo', name: 'Bal d\'Afrique', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '7.100.000đ', wholesalePrice: '5.500.000đ', stock: 19, status: 'Ẩn', img: '/images/San-Pham/SP13.jpg' },
 ];
 
 const TABS = ['Tất cả', 'Đang bán', 'Hết hàng', 'Bản nháp'];
@@ -195,7 +195,7 @@ export default function ProductsPage() {
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
               <button key={p} onClick={() => setPage(p)}
-                style={{ width: '36px', height: '36px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '700', background: page === p ? '#0a3d2b' : '#fff', color: page === p ? '#fff' : '#475569', border: page === p ? 'none' : '1px solid #e2e8f0' } as React.CSSProperties}>
+                style={{ width: '36px', height: '36px', borderRadius: '8px', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', fontSize: '13px', fontWeight: '700', background: page === p ? '#0a3d2b' : '#fff', color: page === p ? '#fff' : '#475569' }}>
                 {p}
               </button>
             ))}

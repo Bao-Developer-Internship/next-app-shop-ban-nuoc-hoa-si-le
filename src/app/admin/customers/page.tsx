@@ -53,9 +53,9 @@ export default function CustomersPage() {
 
   const tabStyle = (active: boolean): React.CSSProperties => ({
     padding: '16px 32px', fontSize: '13px', fontWeight: active ? '700' : '500',
+    borderTop: 'none', borderLeft: 'none', borderRight: 'none',
     borderBottom: active ? '2px solid #0a3d2b' : '2px solid transparent',
-    color: active ? '#0a3d2b' : '#94a3b8', background: 'none', border: 'none',
-    borderBottom: active ? '2px solid #0a3d2b' : '2px solid transparent',
+    color: active ? '#0a3d2b' : '#94a3b8', background: 'none',
     cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'Inter', sans-serif",
     transition: 'color 0.2s',
   });

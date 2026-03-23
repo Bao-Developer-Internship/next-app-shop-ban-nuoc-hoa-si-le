@@ -20,7 +20,7 @@ export default function ShopPage() {
       wholesalePrice: 7250000,
       discount: 15,
       volume: "70ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.42575.jpg",
+      image: "/images/San-Pham/SP9.jpg",
       badge: "Bán Chạy",
       gender: "Unisex"
     },
@@ -31,7 +31,7 @@ export default function ShopPage() {
       price: 5400000,
       wholesalePrice: 4600000,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.46861.jpg",
+      image: "/images/San-Pham/SP13.jpg",
       gender: "Nữ"
     },
     {
@@ -41,7 +41,7 @@ export default function ShopPage() {
       price: 6800000,
       wholesalePrice: 5800000,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.14441.jpg",
+      image: "/images/San-Pham/SP10.jpg",
       badge: "Mới",
       gender: "Unisex"
     },
@@ -53,7 +53,7 @@ export default function ShopPage() {
       wholesalePrice: 4200000,
       discount: 12,
       volume: "60ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.73822.jpg",
+      image: "/images/San-Pham/SP11.jpg",
       gender: "Nam"
     },
     {
@@ -63,7 +63,7 @@ export default function ShopPage() {
       price: 8150000,
       wholesalePrice: 6900000,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.1825.jpg",
+      image: "/images/San-Pham/SP14.jpg",
       gender: "Unisex"
     },
     {
@@ -73,7 +73,7 @@ export default function ShopPage() {
       price: 9600000,
       wholesalePrice: 8200000,
       volume: "75ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.4861.jpg",
+      image: "/images/San-Pham/SP15.jpg",
       gender: "Nam"
     },
     {
@@ -84,7 +84,7 @@ export default function ShopPage() {
       wholesalePrice: 2700000,
       discount: 20,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.31266.jpg",
+      image: "/images/San-Pham/SP12.jpg",
       gender: "Nữ"
     },
     {
@@ -94,7 +94,7 @@ export default function ShopPage() {
       price: 7500000,
       wholesalePrice: 6400000,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.1826.jpg",
+      image: "/images/San-Pham/SP16.jpg",
       gender: "Unisex"
     },
     {
@@ -104,7 +104,7 @@ export default function ShopPage() {
       price: 3800000,
       wholesalePrice: 3200000,
       volume: "50ml",
-      image: "https://fimgs.net/mdimg/perfume/375x500.16016.jpg",
+      image: "/images/San-Pham/SP17.jpg",
       gender: "Nữ"
     },
   ];

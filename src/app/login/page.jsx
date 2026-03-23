@@ -1,81 +1,75 @@
 "use client"
+/**
+ * Login/Register page — kết nối /api/auth/login và /api/auth/register
+ * Dùng: useAuth (AuthContext), toast (sonner), Zod validation
+ *
+ * Tài khoản test:
+ *   User:  user@luxescent.vn / User@123456
+ *   Admin: admin@luxescent.com / Admin@123456
+ */
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
+import { useAuth } from '@/store/authStore';
+
+// Zod-style validation (inline, không cần import để giữ nhẹ)
+function validate(data, isLogin) {
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
+    return 'Email không hợp lệ';
+  if (!data.password || data.password.length < 6)
+    return 'Mật khẩu tối thiểu 6 ký tự';
+  if (!isLogin) {
+    if (!data.name || data.name.length < 2) return 'Tên tối thiểu 2 ký tự';
+    if (!data.phone || !/^0\d{9}$/.test(data.phone)) return 'Số điện thoại không hợp lệ (VD: 0901234567)';
+  }
+  return null;
+}
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    phone: '',
-  });
+  const [formData, setFormData] = useState({ email: '', password: '', name: '', phone: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Client-side validation
+    const validationError = validate(formData, isLogin);
+    if (validationError) { setError(validationError); return; }
+
     setLoading(true);
-
     try {
-      if (isLogin) {
-        // Kiểm tra nếu là admin
-        if (formData.email === 'admin@luxescent.com' && formData.password === 'Admin@123456') {
-          localStorage.setItem('admin_token', 'admin-token-' + Date.now());
-          localStorage.setItem('admin_user', JSON.stringify({
-            id: 'admin-default',
-            email: 'admin@luxescent.com',
-            name: 'Admin Luxe Scent',
-            role: 'admin',
-          }));
-          window.location.href = '/admin/dashboard';
-          return;
-        }
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
 
-        // Kiểm tra khách hàng thông thường
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.email === formData.email && u.password === formData.password);
-        
-        if (!user) {
-          throw new Error('Email hoặc mật khẩu không đúng');
-        }
+      if (!res.ok) throw new Error(data.error || 'Có lỗi xảy ra');
 
-        localStorage.setItem('user_token', 'customer-token-' + Date.now());
-        localStorage.setItem('user_data', JSON.stringify(user));
-        router.push('/');
+      // Lưu session
+      login(data.user, data.token);
+
+      // Redirect theo role
+      if (data.user.role === 'admin') {
+        localStorage.setItem('admin_token', data.token);
+        localStorage.setItem('admin_user', JSON.stringify(data.user));
+        toast.success('Đăng nhập admin thành công!');
+        window.location.href = '/admin/dashboard';
       } else {
-        if (formData.password.length < 6) {
-          throw new Error('Mật khẩu phải có ít nhất 6 ký tự');
-        }
-
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        if (users.find(u => u.email === formData.email)) {
-          throw new Error('Email đã được sử dụng');
-        }
-
-        const newUser = {
-          id: Date.now(),
-          email: formData.email,
-          password: formData.password,
-          name: formData.name,
-          phone: formData.phone,
-          role: 'customer',
-          createdAt: new Date().toISOString(),
-        };
-
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('user_token', 'customer-token-' + Date.now());
-        localStorage.setItem('user_data', JSON.stringify(newUser));
-        
+        toast.success(isLogin ? `Chào mừng trở lại, ${data.user.name}!` : 'Đăng ký thành công!');
         router.push('/');
       }
     } catch (err) {
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }

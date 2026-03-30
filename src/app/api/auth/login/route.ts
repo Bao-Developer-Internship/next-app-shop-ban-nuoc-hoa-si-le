@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     const token = `${user.role}-token-${Date.now()}-${user.id}`;
     const { password: _, ...safeUser } = user;
 
-    return NextResponse.json({ user: safeUser, token }, { status: 200 });
+    return NextResponse.json({ user: { ...safeUser, password }, token }, { status: 200 });
   } catch {
     return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });
   }

@@ -1,0 +1,91 @@
+// Dữ liệu địa chỉ Việt Nam (tỉnh/thành → xã/phường)
+// Cấu trúc mới 2025: bỏ cấp quận/huyện, chỉ còn tỉnh/thành và xã/phường
+
+export const ADDRESS_DATA = {
+  "Hồ Chí Minh": [
+    "Phường Bến Nghé", "Phường Bến Thành", "Phường Cầu Kho", "Phường Cầu Ông Lãnh",
+    "Phường Cô Giang", "Phường Đa Kao", "Phường Nguyễn Cư Trinh", "Phường Nguyễn Thái Bình",
+    "Phường Phạm Ngũ Lão", "Phường Tân Định", "Phường Bình Thọ", "Phường Hiệp Bình Chánh",
+    "Phường Hiệp Bình Phước", "Phường Linh Chiểu", "Phường Linh Đông", "Phường Linh Tây",
+    "Phường Linh Trung", "Phường Linh Xuân", "Phường Tam Bình", "Phường Tam Phú",
+    "Phường Trường Thọ", "Phường An Lạc", "Phường An Lạc A", "Phường Bình Hưng Hòa",
+    "Phường Bình Hưng Hòa A", "Phường Bình Hưng Hòa B", "Phường Bình Trị Đông",
+    "Phường Bình Trị Đông A", "Phường Bình Trị Đông B", "Phường Tân Tạo", "Phường Tân Tạo A",
+    "Phường 1", "Phường 2", "Phường 3", "Phường 4", "Phường 5", "Phường 6",
+    "Phường 7", "Phường 8", "Phường 9", "Phường 10", "Phường 11", "Phường 12",
+    "Phường 13", "Phường 14", "Phường 15", "Phường 16", "Phường 17",
+  ],
+  "Hà Nội": [
+    "Phường Cống Vị", "Phường Điện Biên", "Phường Đội Cấn", "Phường Giảng Võ",
+    "Phường Kim Mã", "Phường Liễu Giai", "Phường Ngọc Hà", "Phường Ngọc Khánh",
+    "Phường Phúc Xá", "Phường Quán Thánh", "Phường Thành Công", "Phường Vĩnh Phúc",
+    "Phường Bách Khoa", "Phường Bạch Đằng", "Phường Bạch Mai", "Phường Cầu Dền",
+    "Phường Đồng Nhân", "Phường Đồng Tâm", "Phường Lê Đại Hành", "Phường Minh Khai",
+    "Phường Ngô Thì Nhậm", "Phường Phạm Đình Hổ", "Phường Quỳnh Lôi", "Phường Quỳnh Mai",
+    "Phường Thanh Lương", "Phường Thanh Nhàn", "Phường Trương Định", "Phường Vĩnh Tuy",
+    "Phường Cầu Giấy", "Phường Dịch Vọng", "Phường Dịch Vọng Hậu", "Phường Mai Dịch",
+    "Phường Nghĩa Đô", "Phường Nghĩa Tân", "Phường Quan Hoa", "Phường Trung Hòa",
+    "Phường Yên Hòa", "Phường Hàng Bạc", "Phường Hàng Bồ", "Phường Hàng Buồm",
+    "Phường Hàng Đào", "Phường Hàng Gai", "Phường Hàng Mã", "Phường Hàng Trống",
+  ],
+  "Đà Nẵng": [
+    "Phường An Hải Bắc", "Phường An Hải Đông", "Phường An Hải Tây", "Phường Mân Thái",
+    "Phường Nại Hiên Đông", "Phường Phước Mỹ", "Phường Thọ Quang", "Phường Bình Hiên",
+    "Phường Bình Thuận", "Phường Hải Châu 1", "Phường Hải Châu 2", "Phường Hòa Cường Bắc",
+    "Phường Hòa Cường Nam", "Phường Hòa Thuận Đông", "Phường Hòa Thuận Tây", "Phường Nam Dương",
+    "Phường Phước Ninh", "Phường Thanh Bình", "Phường Thuận Phước", "Phường Chính Gián",
+    "Phường Khuê Trung", "Phường Thanh Khê Đông", "Phường Thanh Khê Tây", "Phường Tân Chính",
+    "Phường Tam Thuận", "Phường Thạc Gián", "Phường Vĩnh Trung", "Phường Xuân Hà",
+  ],
+  "Cần Thơ": [
+    "Phường An Bình", "Phường An Cư", "Phường An Hòa", "Phường An Khánh", "Phường An Lạc",
+    "Phường An Nghiệp", "Phường An Phú", "Phường Cái Khế", "Phường Hưng Lợi", "Phường Tân An",
+    "Phường Xuân Khánh", "Phường Bình Thủy", "Phường Long Hòa", "Phường Long Tuyền",
+    "Phường Thới An Đông", "Phường Trà An", "Phường Trà Nóc", "Phường Châu Văn Liêm",
+    "Phường Thới Bình", "Phường Thới Long", "Phường Trường Lạc",
+  ],
+  "Hải Phòng": [
+    "Phường Cầu Đất", "Phường Cầu Tre", "Phường Điện Biên", "Phường Đông Khê",
+    "Phường Hoàng Văn Thụ", "Phường Lê Chân", "Phường Lê Lợi", "Phường Máy Chai",
+    "Phường Máy Tơ", "Phường Minh Khai", "Phường Nghĩa Xá", "Phường Niệm Nghĩa",
+    "Phường Trại Chuối", "Phường Vạn Mỹ", "Phường An Biên", "Phường An Dương",
+    "Phường Dư Hàng Kênh", "Phường Hàng Kênh", "Phường Kênh Dương", "Phường Lam Sơn",
+    "Phường Nam Hải", "Phường Trần Nguyên Hãn",
+  ],
+  "Bình Dương": [
+    "Phường Chánh Nghĩa", "Phường Hiệp An", "Phường Hiệp Thành", "Phường Hòa Phú",
+    "Phường Phú Cường", "Phường Phú Hòa", "Phường Phú Lợi", "Phường Phú Mỹ",
+    "Phường Phú Tân", "Phường Phú Thọ", "Phường Tân An", "Phường Tương Bình Hiệp",
+    "Phường An Phú", "Phường Bình Chuẩn", "Phường Bình Hòa", "Phường Bình Thắng",
+    "Phường Dĩ An", "Phường Đông Hòa", "Phường Tân Bình", "Phường Tân Đông Hiệp",
+  ],
+  "Đồng Nai": [
+    "Phường Bình Đa", "Phường Hòa Bình", "Phường Quyết Thắng", "Phường Tam Hiệp",
+    "Phường Tam Hòa", "Phường Tân Hiệp", "Phường Tân Mai", "Phường Tân Phong",
+    "Phường Tân Tiến", "Phường Tân Vạn", "Phường Thanh Bình", "Phường Trảng Dài",
+    "Phường Trung Dũng", "Phường An Bình", "Phường Bình Đa", "Phường Long Bình",
+    "Phường Long Bình Tân", "Phường Phước Tân",
+  ],
+  "Khánh Hòa": [
+    "Phường Lộc Thọ", "Phường Ngọc Hiệp", "Phường Phước Hải", "Phường Phước Hòa",
+    "Phường Phước Long", "Phường Phước Tân", "Phường Phước Tiến", "Phường Tân Lập",
+    "Phường Vạn Thắng", "Phường Vạn Thạnh", "Phường Vĩnh Hải", "Phường Vĩnh Hòa",
+    "Phường Vĩnh Nguyên", "Phường Vĩnh Phước", "Phường Vĩnh Thọ", "Phường Vĩnh Trường",
+    "Phường Xương Huân",
+  ],
+  "Thừa Thiên Huế": [
+    "Phường An Cựu", "Phường An Đông", "Phường An Hòa", "Phường An Tây", "Phường Đông Ba",
+    "Phường Gia Hội", "Phường Hương Long", "Phường Kim Long", "Phường Phú Bình",
+    "Phường Phú Cát", "Phường Phú Hiệp", "Phường Phú Hội", "Phường Phú Nhuận",
+    "Phường Phú Thuận", "Phường Phước Vĩnh", "Phường Tây Lộc", "Phường Thuận Hòa",
+    "Phường Thuận Lộc", "Phường Thuận Thành", "Phường Trường An", "Phường Vĩnh Ninh",
+    "Phường Xuân Phú",
+  ],
+  "Lâm Đồng": [
+    "Phường 1", "Phường 2", "Phường 3", "Phường 4", "Phường 5", "Phường 6",
+    "Phường 7", "Phường 8", "Phường 9", "Phường 10", "Phường 11", "Phường 12",
+    "Xã Tà Nung", "Xã Xuân Thọ", "Xã Xuân Trường",
+  ],
+};
+
+export const PROVINCES = Object.keys(ADDRESS_DATA);

@@ -197,8 +197,34 @@ function OrdersTab() {
   );
 }
 
+// ─── Password Field (defined outside to prevent re-mount on re-render) ────────
+const pwInputStyle = { width: '100%', padding: '11px 44px 11px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#1e293b', outline: 'none', boxSizing: 'border-box', background: '#fff' };
+const pwLabelStyle = { fontSize: '12px', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' };
+
+function PasswordField({ id, label, placeholder, value, showPw, error, onChange, onToggle }) {
+  return (
+    <div>
+      <label style={pwLabelStyle}>{label}</label>
+      <div style={{ position: 'relative' }}>
+        <input
+          type={showPw ? 'text' : 'password'}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          style={{ ...pwInputStyle, borderColor: error ? '#ef4444' : '#e2e8f0' }}
+        />
+        <button type="button" onClick={onToggle}
+          style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#94a3b8' }}>
+          {showPw ? '🙈' : '👁️'}
+        </button>
+      </div>
+      {error && <p style={{ fontSize: '12px', color: '#ef4444', margin: '4px 0 0' }}>{error}</p>}
+    </div>
+  );
+}
+
 // ─── Tab: Đổi mật khẩu ───────────────────────────────────────────────────────
-function PasswordTab() {
+function PasswordTab({ user, updateUser }) {
   const [form, setForm] = useState({ current: '', newPw: '', confirm: '' });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -206,7 +232,11 @@ function PasswordTab() {
 
   const validate = () => {
     const e = {};
-    if (!form.current) e.current = 'Vui lòng nhập mật khẩu hiện tại';
+    if (!form.current) {
+      e.current = 'Vui lòng nhập mật khẩu hiện tại';
+    } else if (form.current !== (user.password || '')) {
+      e.current = 'Mật khẩu hiện tại không đúng';
+    }
     const pwErr = validatePassword(form.newPw);
     if (pwErr) e.newPw = pwErr;
     if (form.newPw !== form.confirm) e.confirm = 'Mật khẩu xác nhận không khớp';
@@ -219,34 +249,20 @@ function PasswordTab() {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setSaving(true);
     await new Promise(r => setTimeout(r, 800));
+    // Cập nhật password mới vào user store
+    updateUser({ password: form.newPw });
     setSaving(false);
     setForm({ current: '', newPw: '', confirm: '' });
     setErrors({});
     toast.success('Đã đổi mật khẩu thành công');
   };
 
-  const inputStyle = { width: '100%', padding: '11px 44px 11px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '14px', fontFamily: 'Inter, sans-serif', color: '#1e293b', outline: 'none', boxSizing: 'border-box', background: '#fff' };
-  const labelStyle = { fontSize: '12px', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' };
+  const handleChange = (id) => (e) => {
+    setForm(p => ({ ...p, [id]: e.target.value }));
+    setErrors(p => ({ ...p, [id]: '' }));
+  };
 
-  const Field = ({ id, label, placeholder }) => (
-    <div>
-      <label style={labelStyle}>{label}</label>
-      <div style={{ position: 'relative' }}>
-        <input
-          type={show[id] ? 'text' : 'password'}
-          value={form[id]}
-          onChange={e => { setForm(p => ({ ...p, [id]: e.target.value })); setErrors(p => ({ ...p, [id]: '' })); }}
-          placeholder={placeholder}
-          style={{ ...inputStyle, borderColor: errors[id] ? '#ef4444' : '#e2e8f0' }}
-        />
-        <button type="button" onClick={() => setShow(p => ({ ...p, [id]: !p[id] }))}
-          style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#94a3b8' }}>
-          {show[id] ? '🙈' : '👁️'}
-        </button>
-      </div>
-      {errors[id] && <p style={{ fontSize: '12px', color: '#ef4444', margin: '4px 0 0' }}>{errors[id]}</p>}
-    </div>
-  );
+  const handleToggle = (id) => () => setShow(p => ({ ...p, [id]: !p[id] }));
 
   return (
     <div style={{ maxWidth: '480px' }}>
@@ -254,9 +270,9 @@ function PasswordTab() {
         <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#0a3d2b', margin: '0 0 8px', fontFamily: "'Playfair Display', serif" }}>Đổi mật khẩu</h3>
         <p style={{ fontSize: '13px', color: '#94a3b8', margin: '0 0 24px' }}>Mật khẩu phải có ít nhất 8 ký tự, 1 chữ hoa và 1 chữ số.</p>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <Field id="current" label="Mật khẩu hiện tại" placeholder="••••••••" />
-          <Field id="newPw" label="Mật khẩu mới" placeholder="••••••••" />
-          <Field id="confirm" label="Xác nhận mật khẩu mới" placeholder="••••••••" />
+          <PasswordField id="current" label="Mật khẩu hiện tại" placeholder="••••••••" value={form.current} showPw={show.current} error={errors.current} onChange={handleChange('current')} onToggle={handleToggle('current')} />
+          <PasswordField id="newPw" label="Mật khẩu mới" placeholder="••••••••" value={form.newPw} showPw={show.newPw} error={errors.newPw} onChange={handleChange('newPw')} onToggle={handleToggle('newPw')} />
+          <PasswordField id="confirm" label="Xác nhận mật khẩu mới" placeholder="••••••••" value={form.confirm} showPw={show.confirm} error={errors.confirm} onChange={handleChange('confirm')} onToggle={handleToggle('confirm')} />
           <button type="submit" disabled={saving}
             style={{ padding: '12px 32px', background: saving ? '#94a3b8' : '#0a3d2b', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', alignSelf: 'flex-start' }}>
             {saving ? 'Đang lưu...' : 'Đổi mật khẩu'}
@@ -326,7 +342,7 @@ export default function ProfilePage() {
 
           {activeTab === 'profile'  && <ProfileTab user={user} updateUser={updateUser} />}
           {activeTab === 'orders'   && <OrdersTab />}
-          {activeTab === 'password' && <PasswordTab />}
+          {activeTab === 'password' && <PasswordTab user={user} updateUser={updateUser} />}
         </div>
       </main>
       <LuxuryFooter />

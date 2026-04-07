@@ -92,6 +92,8 @@ export default function LuxuryHeader() {
   const { cartCount, wishlistCount } = useCart();
   const { user, isLoggedIn, logout } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const handleLogout = () => {
     logout();
@@ -139,19 +141,19 @@ export default function LuxuryHeader() {
 
           <div className="col-6 col-md-3 text-end" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
             {/* User đã đăng nhập: avatar dropdown | Vãng lai: nút đăng nhập */}
-            {isLoggedIn ? (
+            {mounted && (isLoggedIn ? (
               <UserDropdown user={user} onLogout={handleLogout} />
             ) : (
               <Link href="/login" className="btn position-relative me-2"
                 style={{ border: 'none', background: 'transparent', fontSize: '14px', color: 'var(--emerald-green)', fontWeight: '500' }}>
                 👤 Đăng nhập
               </Link>
-            )}
+            ))}
 
             <Link href="/favorite" className="btn position-relative"
               style={{ border: 'none', background: 'transparent', padding: '6px 8px' }}>
               <span style={{ fontSize: '22px' }}>❤️</span>
-              {wishlistCount > 0 && (
+              {mounted && wishlistCount > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill"
                   style={{ background: 'var(--rose-gold)', fontSize: '10px' }}>
                   {wishlistCount}
@@ -162,7 +164,7 @@ export default function LuxuryHeader() {
             <Link href="/cart" className="btn position-relative"
               style={{ border: 'none', background: 'transparent', padding: '6px 8px' }}>
               <span style={{ fontSize: '22px' }}>🛒</span>
-              {cartCount > 0 && (
+              {mounted && cartCount > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill"
                   style={{ background: 'var(--emerald-green)', fontSize: '10px' }}>
                   {cartCount}

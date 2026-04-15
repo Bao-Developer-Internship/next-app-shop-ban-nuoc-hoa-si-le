@@ -3,9 +3,10 @@
  * Trang Home — kết nối /api/products?featured=true
  * Dùng: CartContext (addToCart), toast (sonner)
  */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
+import { useProducts } from "@/hooks/useProducts";
 import ProductItem from "@/component/ProductItem";
 import LuxuryHeader from "@/component/LuxuryHeader";
 import LuxuryFooter from "@/component/LuxuryFooter";
@@ -42,17 +43,8 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const { addToCart } = useCart();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch featured products từ API
-  useEffect(() => {
-    fetch('/api/products?featured=true')
-      .then(r => r.json())
-      .then(data => setProducts(data.products || []))
-      .catch(() => toast.error('Không thể tải sản phẩm'))
-      .finally(() => setLoading(false));
-  }, []);
+  const products = useProducts({ featured: true, limit: 8 });
+  const loading = products.length === 0;
 
   const handleAddToCart = (product) => {
     addToCart(product);

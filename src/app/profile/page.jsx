@@ -110,17 +110,67 @@ function ProfileTab({ user, updateUser }) {
 
 // ─── Tab: Đơn hàng ───────────────────────────────────────────────────────────
 function OrdersTab() {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
 
+  // Map MongoDB status sang UI status
+  const STATUS_DB_MAP = {
+    pending: 'Chờ xác nhận',
+    processing: 'Đang xử lý',
+    shipping: 'Đang giao',
+    completed: 'Đã giao',
+    cancelled: 'Đã hủy',
+  };
+
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('luxe-orders') || '[]');
-      setOrders(stored.length ? stored : MOCK_ORDERS);
-    } catch {
-      setOrders(MOCK_ORDERS);
-    }
-  }, []);
+    const fetchOrders = async () => {
+      if (!user?.email) { setLoading(false); return; }
+      try {
+        const res = await fetch(`/api/orders/my?email=${encodeURIComponent(user.email)}`);
+        const data = await res.json();
+        if (data.orders && data.orders.length > 0) {
+          // Map từ MongoDB format sang UI format
+          const mapped = data.orders.map(o => ({
+            id: o.orderNumber || o._id,
+            _id: o._id,
+            date: o.createdAt,
+            status: STATUS_DB_MAP[o.status] || 'Chờ xác nhận',
+            total: o.total,
+            items: (o.items || []).map(item => ({
+              name: item.name,
+              qty: item.quantity,
+              price: item.price,
+              img: item.image || '/images/San-Pham/SP1.jpg',
+            })),
+            address: o.shippingAddress,
+            cancelReason: o.notes,
+            statusHistory: (o.statusHistory || []).map(h => ({
+              status: STATUS_DB_MAP[h.status] || h.status,
+              note: h.note,
+              changedAt: h.changedAt,
+            })),
+          }));
+          setOrders(mapped);
+        } else {
+          setOrders([]);
+        }
+      } catch {
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [user?.email]);
+
+  if (loading) return (
+    <div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+      <div style={{ fontSize: '32px', marginBottom: '12px' }}>⏳</div>
+      <p style={{ fontSize: '14px', color: '#94a3b8' }}>Đang tải đơn hàng...</p>
+    </div>
+  );
 
   if (!orders.length) return (
     <div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
@@ -175,7 +225,8 @@ function OrdersTab() {
             )}
 
             {isOpen && (
-              <div style={{ borderTop: '1px solid #f1f5f9', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ borderTop: '1px solid #f1f5f9', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Danh sách sản phẩm */}
                 {(order.items || []).map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div style={{ width: '56px', height: '56px', borderRadius: '10px', overflow: 'hidden', background: '#f8fafc', flexShrink: 0 }}>
@@ -188,6 +239,38 @@ function OrdersTab() {
                     <p style={{ fontSize: '14px', fontWeight: '700', color: '#c5a059', margin: 0 }}>{(item.price * item.qty).toLocaleString('vi-VN')}đ</p>
                   </div>
                 ))}
+
+                {/* Lý do hủy */}
+                {order.status === 'Đã hủy' && order.cancelReason && (
+                  <div style={{ background: '#fee2e2', borderRadius: '10px', padding: '14px 16px', border: '1px solid #fecaca' }}>
+                    <p style={{ fontSize: '12px', fontWeight: '700', color: '#dc2626', margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Lý do hủy</p>
+                    <p style={{ fontSize: '13px', color: '#dc2626', margin: 0 }}>{order.cancelReason}</p>
+                  </div>
+                )}
+
+                {/* Lịch sử trạng thái */}
+                {order.statusHistory && order.statusHistory.length > 0 && (
+                  <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '16px', border: '1px solid #e2e8f0' }}>
+                    <p style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 12px' }}>Lịch sử cập nhật</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {[...order.statusHistory].reverse().map((h, i) => {
+                        const sc = STATUS_COLOR[h.status] || STATUS_COLOR['Chờ xác nhận'];
+                        return (
+                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: sc.color, flexShrink: 0, marginTop: '5px' }} />
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <span style={{ fontSize: '12px', fontWeight: '700', padding: '2px 8px', borderRadius: '999px', background: sc.bg, color: sc.color }}>{h.status}</span>
+                                <span style={{ fontSize: '11px', color: '#94a3b8' }}>{new Date(h.changedAt).toLocaleString('vi-VN')}</span>
+                              </div>
+                              {h.note && <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0' }}>{h.note}</p>}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

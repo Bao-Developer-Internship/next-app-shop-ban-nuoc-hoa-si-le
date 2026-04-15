@@ -5,6 +5,9 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import connectDB from '@/lib/mongodb';
+import User from '@/models/User';
+import { hashPassword, generateToken } from '@/lib/auth';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Tên tối thiểu 2 ký tự'),
@@ -27,19 +30,43 @@ export async function POST(req: NextRequest) {
 
     const { name, email, phone, password } = parsed.data;
 
-    // Trong production: kiểm tra DB, hash password với bcrypt
-    // Hiện tại: lưu vào localStorage phía client (xử lý ở login page)
-    const newUser = {
-      id: `user-${Date.now()}`,
-      name, email, phone,
-      role: 'customer',
-      joinDate: new Date().toLocaleDateString('vi-VN'),
-    };
+    const db = await connectDB();
+    if (!db) {
+      return NextResponse.json({ error: 'Không thể kết nối cơ sở dữ liệu' }, { status: 503 });
+    }
 
-    const token = `customer-token-${Date.now()}-${newUser.id}`;
+    // Kiểm tra email đã tồn tại chưa
+    const existing = await User.findOne({ email: email.toLowerCase() });
+    if (existing) {
+      return NextResponse.json({ error: 'Email đã được sử dụng' }, { status: 409 });
+    }
 
-    return NextResponse.json({ user: newUser, token }, { status: 201 });
-  } catch {
+    const hashed = await hashPassword(password);
+
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      phone,
+      password: hashed,
+      role: 'retail',
+      isActive: true,
+    });
+
+    const token = generateToken({ id: user._id, email: user.email, role: user.role });
+
+    return NextResponse.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        joinDate: new Date().toLocaleDateString('vi-VN'),
+      },
+      token,
+    }, { status: 201 });
+  } catch (err) {
+    console.error('POST /api/auth/register error:', err);
     return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });
   }
 }

@@ -1,31 +1,30 @@
 "use client"
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import LuxuryHeader from "@/component/LuxuryHeader";
 import LuxuryFooter from "@/component/LuxuryFooter";
 import ProductItem from "@/component/ProductItem";
+import { getProducts } from "@/store/productStore";
 
 const PRODUCTS_PER_PAGE = 6;
 
-const ALL_PRODUCTS = [
-  { id: 1, name: "Baccarat Rouge 540", brand: "Maison Francis", price: 8500000, wholesalePrice: 7250000, discount: 15, volume: "70ml", image: "/images/San-Pham/SP9.jpg", badge: "Bán Chạy", gender: "Unisex", scent: "Hương gia vị", longevity: "Rất lâu (Trên 12 giờ)" },
-  { id: 2, name: "Rose of No Man's Land", brand: "Byredo", price: 5400000, wholesalePrice: 4600000, volume: "50ml", image: "/images/San-Pham/SP13.jpg", gender: "Nữ", scent: "Hương hoa cỏ", longevity: "Lâu (7-12 giờ)" },
-  { id: 3, name: "Santal 33", brand: "Le Labo", price: 6800000, wholesalePrice: 5800000, volume: "50ml", image: "/images/San-Pham/SP10.jpg", badge: "Mới", gender: "Unisex", scent: "Hương gỗ", longevity: "Lâu (7-12 giờ)" },
-  { id: 4, name: "Sauvage Elixir", brand: "Dior", price: 4800000, wholesalePrice: 4200000, discount: 12, volume: "60ml", image: "/images/San-Pham/SP11.jpg", gender: "Nam", scent: "Hương gỗ", longevity: "Rất lâu (Trên 12 giờ)" },
-  { id: 5, name: "Tobacco Vanille", brand: "Tom Ford", price: 8150000, wholesalePrice: 6900000, volume: "50ml", image: "/images/San-Pham/SP14.jpg", gender: "Unisex", scent: "Hương gia vị", longevity: "Rất lâu (Trên 12 giờ)" },
-  { id: 6, name: "Aventus", brand: "Creed", price: 9600000, wholesalePrice: 8200000, volume: "75ml", image: "/images/San-Pham/SP15.jpg", gender: "Nam", scent: "Hương hoa cỏ", longevity: "Lâu (7-12 giờ)" },
-  { id: 7, name: "Black Opium", brand: "YSL", price: 3200000, wholesalePrice: 2700000, discount: 20, volume: "50ml", image: "/images/San-Pham/SP12.jpg", gender: "Nữ", scent: "Hương gia vị", longevity: "Trung bình (3-6 giờ)" },
-  { id: 8, name: "Oud Wood", brand: "Tom Ford", price: 7500000, wholesalePrice: 6400000, volume: "50ml", image: "/images/San-Pham/SP16.jpg", gender: "Unisex", scent: "Hương gỗ", longevity: "Rất lâu (Trên 12 giờ)" },
-  { id: 9, name: "La Vie Est Belle", brand: "Lancôme", price: 3800000, wholesalePrice: 3200000, volume: "50ml", image: "/images/San-Pham/SP17.jpg", gender: "Nữ", scent: "Hương hoa cỏ", longevity: "Lâu (7-12 giờ)" },
-  { id: 10, name: "Bleu de Chanel", brand: "Chanel", price: 4200000, wholesalePrice: 3600000, volume: "50ml", image: "/images/San-Pham/SP1.jpg", gender: "Nam", scent: "Hương gỗ", longevity: "Lâu (7-12 giờ)" },
-  { id: 11, name: "Miss Dior", brand: "Dior", price: 3600000, wholesalePrice: 3100000, volume: "50ml", image: "/images/San-Pham/SP2.jpg", gender: "Nữ", scent: "Hương hoa cỏ", longevity: "Trung bình (3-6 giờ)" },
-  { id: 12, name: "Neroli Portofino", brand: "Tom Ford", price: 7200000, wholesalePrice: 6100000, volume: "50ml", image: "/images/San-Pham/SP3.jpg", gender: "Unisex", scent: "Hương cam chanh", longevity: "Lâu (7-12 giờ)" },
-  { id: 13, name: "Acqua di Gio", brand: "Armani", price: 2800000, wholesalePrice: 2400000, volume: "50ml", image: "/images/San-Pham/SP4.jpg", gender: "Nam", scent: "Hương cam chanh", longevity: "Trung bình (3-6 giờ)" },
-  { id: 14, name: "Flowerbomb", brand: "Viktor&Rolf", price: 3900000, wholesalePrice: 3300000, volume: "50ml", image: "/images/San-Pham/Sp5.jpg", gender: "Nữ", scent: "Hương hoa cỏ", longevity: "Lâu (7-12 giờ)" },
-  { id: 15, name: "Oud Satin Mood", brand: "Maison Francis", price: 9200000, wholesalePrice: 7800000, volume: "70ml", image: "/images/San-Pham/SP6.jpg", gender: "Unisex", scent: "Hương gia vị", longevity: "Rất lâu (Trên 12 giờ)" },
-  { id: 16, name: "Bergamote 22", brand: "Le Labo", price: 5800000, wholesalePrice: 4900000, volume: "50ml", image: "/images/San-Pham/SP7.jpg", gender: "Unisex", scent: "Hương cam chanh", longevity: "Lâu (7-12 giờ)" },
-  { id: 17, name: "Molecule 01", brand: "Escentric Molecules", price: 2500000, wholesalePrice: 2100000, volume: "50ml", image: "/images/San-Pham/SP8.jpg", gender: "Unisex", scent: "Hương gỗ", longevity: "Rất lâu (Trên 12 giờ)" },
-];
+// Map StoreProduct → shape dùng trong shop
+function toShopProduct(p) {
+  return {
+    id: p.id,
+    name: p.name,
+    brand: p.brand,
+    price: p.price,
+    wholesalePrice: p.wholesalePrice,
+    discount: p.discount,
+    volume: p.volume,
+    image: p.image,
+    badge: p.badge,
+    gender: p.gender,
+    scent: "Hương gỗ",
+    longevity: "Lâu (7-12 giờ)",
+  };
+}
 
 const PRICE_RANGES = [
   { label: "Dưới 3.000.000", min: 0, max: 3000000 },
@@ -41,8 +40,6 @@ const SCENT_FAMILIES = [
   { icon: "✨", name: "Hương gia vị" },
 ];
 
-const BRANDS = ["Dior", "Chanel", "Tom Ford", "Creed", "Le Labo", "Byredo", "Maison Francis", "YSL", "Lancôme", "Armani"];
-
 const LONGEVITY_OPTIONS = ["Tất cả", "Trung bình (3-6 giờ)", "Lâu (7-12 giờ)", "Rất lâu (Trên 12 giờ)"];
 
 export default function ShopPage() {
@@ -50,6 +47,15 @@ export default function ShopPage() {
   const [isWholesale, setIsWholesale] = useState(false);
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const [allProducts, setAllProducts] = useState([]);
+
+  // Load từ store + lắng nghe cập nhật
+  useEffect(() => {
+    const load = () => setAllProducts(getProducts().filter(p => p.status === 'active').map(toShopProduct));
+    load();
+    window.addEventListener('products-updated', load);
+    return () => window.removeEventListener('products-updated', load);
+  }, []);
 
   // Filter states
   const [selectedGender, setSelectedGender] = useState(null);
@@ -57,6 +63,9 @@ export default function ShopPage() {
   const [selectedScents, setSelectedScents] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedLongevity, setSelectedLongevity] = useState("Tất cả");
+
+  // Brands dynamic từ store
+  const brands = useMemo(() => [...new Set(allProducts.map(p => p.brand))].sort(), [allProducts]);
 
   const toggleSet = (setter, value) => {
     setter(prev =>
@@ -77,7 +86,7 @@ export default function ShopPage() {
   const hasActiveFilters = selectedGender || selectedPrices.length > 0 || selectedScents.length > 0 || selectedBrands.length > 0 || selectedLongevity !== "Tất cả";
 
   const filteredProducts = useMemo(() => {
-    let result = [...ALL_PRODUCTS];
+    let result = [...allProducts];
 
     if (selectedGender) {
       result = result.filter(p => p.gender.toLowerCase() === selectedGender.toLowerCase());
@@ -113,7 +122,7 @@ export default function ShopPage() {
     }
 
     return result;
-  }, [selectedGender, selectedPrices, selectedScents, selectedBrands, selectedLongevity, sortBy, isWholesale]);
+  }, [selectedGender, selectedPrices, selectedScents, selectedBrands, selectedLongevity, sortBy, isWholesale, allProducts]);
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
@@ -263,7 +272,7 @@ export default function ShopPage() {
                           <span style={{ fontSize: "13px", color: "#555" }}>{family.name}</span>
                         </div>
                         <span style={{ fontSize: "11px", color: "#aaa", fontWeight: "700" }}>
-                          {ALL_PRODUCTS.filter(p => p.scent === family.name).length}
+                          {allProducts.filter(p => p.scent === family.name).length}
                         </span>
                       </label>
                     );
@@ -288,7 +297,7 @@ export default function ShopPage() {
               <div style={{ marginBottom: "28px" }}>
                 <p style={{ fontSize: "14px", fontWeight: "600", marginBottom: "12px", color: "#2c2c2c" }}>Thương hiệu</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {BRANDS.map((brand) => (
+                  {brands.map((brand) => (
                     <label key={brand} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
                       <input
                         type="checkbox"

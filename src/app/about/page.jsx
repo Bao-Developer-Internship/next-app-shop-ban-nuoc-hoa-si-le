@@ -537,10 +537,10 @@ export default function AboutPage() {
             </div>
             <div className="row g-4">
               {[
-                {name: 'Jean-Louis Martin', role: 'Giám đốc Sáng tạo', img: 'https://fimgs.net/mdimg/perfume/375x500.73669.jpg'},
-                {name: 'Sophie Claire', role: 'Bậc thầy Mùi hương (Nose)', img: 'https://fimgs.net/mdimg/perfume/375x500.1713.jpg'},
-                {name: 'Lê Minh', role: 'Giám đốc Vận hành', img: 'https://fimgs.net/mdimg/perfume/375x500.2825.jpg'},
-                {name: 'Elena Rodriguez', role: 'Thiết kế Trải nghiệm', img: 'https://fimgs.net/mdimg/perfume/375x500.1826.jpg'}
+                {name: 'Jean-Louis Martin', role: 'Giám đốc Sáng tạo', img: '/images/Nhan-Vien/Gemini_Generated_Image_qlenh1qlenh1qlen.png'},
+                {name: 'Sophie Claire', role: 'Bậc thầy Mùi hương (Nose)', img: '/images/Nhan-Vien/z7647997649633_ee16332a1e447cc33f48323741d068ff.jpg'},
+                {name: 'Lê Minh', role: 'Giám đốc Vận hành', img: '/images/Nhan-Vien/z7647997932664_3f9aab56a97e448f6611556bf7b98b41.jpg'},
+                {name: 'Elena Rodriguez', role: 'Thiết kế Trải nghiệm', img: '/images/Nhan-Vien/z7647997937857_8282068c92924605d55382d15698e9ca.jpg'}
               ].map((member, index) => (
                 <div key={index} className="col-sm-6 col-lg-3">
                   <div className="hover-scale">

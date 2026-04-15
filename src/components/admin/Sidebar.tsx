@@ -8,7 +8,8 @@ const menuItems = [
   { href: '/admin/customers', icon: 'group', label: 'Khách hàng' },
   { href: '/admin/products', icon: 'inventory_2', label: 'Sản phẩm' },
   { href: '/admin/collections', icon: 'auto_awesome_motion', label: 'Bộ sưu tập' },
-  { href: '/admin/settings', icon: 'manage_accounts', label: 'Nhân viên' },
+  { href: '/admin/employees', icon: 'manage_accounts', label: 'Nhân viên' },
+  { href: '/admin/settings', icon: 'settings', label: 'Cài đặt' },
 ];
 
 export default function Sidebar() {
@@ -74,12 +75,7 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom Button */}
-      <div style={{ padding: '0 20px' }}>
-        <button className="new-product-btn">
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
-          Thêm sản phẩm
-        </button>
-      </div>
+      <div style={{ padding: '0 20px' }} />
     </aside>
   );
 }

@@ -63,6 +63,7 @@ function UserDropdown({ user, onLogout }) {
             { href: '/profile', icon: '👤', label: 'Trang cá nhân' },
             { href: '/profile?tab=orders', icon: '📦', label: 'Đơn hàng của tôi' },
             { href: '/favorite', icon: '❤️', label: 'Sản phẩm yêu thích' },
+            ...(user.role === 'admin' ? [{ href: '/admin/dashboard', icon: '⚙️', label: 'Quản lý hệ thống' }] : []),
           ].map(item => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
               style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 16px', textDecoration: 'none', color: '#475569', fontSize: '13px', fontWeight: '500', transition: 'background 0.15s' }}

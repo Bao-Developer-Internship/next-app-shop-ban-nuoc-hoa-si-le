@@ -172,7 +172,7 @@ function Step1({ cartItems, removeFromCart, updateQuantity, summaryProps, onNext
 }
 
 // ── STEP 2: Địa chỉ + Vận chuyển + Thanh toán ────────────────
-function Step2({ address, setAddress, isAddressValid, selectedShipping, setSelectedShipping, selectedPayment, setSelectedPayment, summaryProps, onPlace, onBack }) {
+function Step2({ address, setAddress, isAddressValid, selectedShipping, setSelectedShipping, selectedPayment, setSelectedPayment, summaryProps, onPlace, placing, onBack }) {
   const { user, isLoggedIn } = useAuth();
   const wards = ADDRESS_DATA[address.province] || [];
 
@@ -317,9 +317,9 @@ function Step2({ address, setAddress, isAddressValid, selectedShipping, setSelec
         <OrderSummary {...summaryProps}
           actionBtn={
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <button onClick={onPlace} className="luxury-btn" disabled={!isFormValid}
-                style={{ width: '100%', padding: '16px', fontSize: '14px', letterSpacing: '1px', opacity: isFormValid ? 1 : 0.5, cursor: isFormValid ? 'pointer' : 'not-allowed' }}>
-                ĐẶT HÀNG NGAY
+              <button onClick={onPlace} className="luxury-btn" disabled={!isFormValid || placing}
+                style={{ width: '100%', padding: '16px', fontSize: '14px', letterSpacing: '1px', opacity: (isFormValid && !placing) ? 1 : 0.5, cursor: (isFormValid && !placing) ? 'pointer' : 'not-allowed' }}>
+                {placing ? 'ĐANG XỬ LÝ...' : 'ĐẶT HÀNG NGAY'}
               </button>
               <button onClick={onBack} style={{ width: '100%', padding: '12px', background: 'transparent', border: '1px solid rgba(10,61,42,0.2)', borderRadius: '8px', color: 'var(--emerald-green)', fontWeight: '600', fontSize: '13px', cursor: 'pointer' }}>
                 ← Quay lại giỏ hàng
@@ -342,6 +342,7 @@ export default function CartPage() {
   const [voucher, setVoucher] = useState('');
   const [discount, setDiscount] = useState(0);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [placing, setPlacing] = useState(false);
   const [address, setAddress] = useState({
     fullName: '', phone: '', email: '',
     province: 'Hồ Chí Minh', ward: ADDRESS_DATA['Hồ Chí Minh'][0], detail: ''
@@ -366,7 +367,60 @@ export default function CartPage() {
     else alert('Mã voucher không hợp lệ');
   };
 
-  const handlePlaceOrder = () => { setOrderPlaced(true); clearCart(); };
+  const handlePlaceOrder = async () => {
+    if (placing) return;
+    setPlacing(true);
+    const customerName = isLoggedIn ? user.name : address.fullName;
+    const customerEmail = isLoggedIn ? user.email : address.email;
+    const customerPhone = isLoggedIn ? user.phone : address.phone;
+    const shippingAddress = `${address.detail}, ${address.ward}, ${address.province}`;
+
+    const paymentMap = {
+      momo: 'momo',
+      domestic_bank: 'bank_transfer',
+      international_bank: 'card',
+    };
+
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: {
+            name: customerName,
+            email: customerEmail,
+            phone: customerPhone,
+            address: address.detail || shippingAddress,
+            city: address.province,
+          },
+          items: cartItems.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image || '',
+          })),
+          total,
+          type: 'retail',
+          paymentMethod: paymentMap[selectedPayment] || 'bank_transfer',
+          note: '',
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || 'Đặt hàng thất bại, vui lòng thử lại');
+        return;
+      }
+
+      clearCart();
+      setOrderPlaced(true);
+    } catch {
+      alert('Lỗi kết nối, vui lòng thử lại');
+    } finally {
+      setPlacing(false);
+    }
+  };
 
   const summaryProps = { cartItems, subtotal, shippingFee, discount, total, voucher, setVoucher, onApplyVoucher: handleApplyVoucher };
 
@@ -410,6 +464,7 @@ export default function CartPage() {
             setSelectedPayment={setSelectedPayment}
             summaryProps={summaryProps}
             onPlace={handlePlaceOrder}
+            placing={placing}
             onBack={() => setCurrentStep(1)}
           />
         )}

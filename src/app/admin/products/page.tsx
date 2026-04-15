@@ -1,18 +1,46 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductTable, { Product } from '@/components/admin/ProductTable';
 import SaveConfirmModal from '@/components/admin/SaveConfirmModal';
+import { getProducts, saveProducts, StoreProduct } from '@/store/productStore';
 
-const initialProducts: Product[] = [
-  { id: 1, brand: 'Maison Francis Kurkdjian', name: 'Baccarat Rouge 540 Extrait de Parfum', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '12.500.000đ', wholesalePrice: '9.850.000đ', stock: 42, status: 'Hiển thị', img: '/images/San-Pham/SP9.jpg' },
-  { id: 2, brand: 'Tom Ford', name: 'Oud Wood Intense', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '9.200.000đ', wholesalePrice: '7.100.000đ', stock: 8, status: 'Hiển thị', img: '/images/San-Pham/SP16.jpg' },
-  { id: 3, brand: 'Creed', name: 'Aventus For Men', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '8.500.000đ', wholesalePrice: '6.400.000đ', stock: 124, status: 'Ẩn', img: '/images/San-Pham/SP15.jpg' },
-  { id: 4, brand: 'Le Labo', name: 'Santal 33', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '7.800.000đ', wholesalePrice: '5.900.000đ', stock: 'Hết hàng', status: 'Hiển thị', img: '/images/San-Pham/SP10.jpg' },
-  { id: 5, brand: 'Chanel', name: 'Bleu de Chanel Parfum', season: 'Tất cả mùa', seasonColor: 'slate', retailPrice: '6.200.000đ', wholesalePrice: '4.800.000đ', stock: 67, status: 'Hiển thị', img: '/images/San-Pham/SP2.jpg' },
-  { id: 6, brand: 'Dior', name: 'Sauvage Elixir', season: 'Thu / Đông', seasonColor: 'gold', retailPrice: '5.900.000đ', wholesalePrice: '4.500.000đ', stock: 33, status: 'Hiển thị', img: '/images/San-Pham/SP11.jpg' },
-  { id: 7, brand: 'Byredo', name: 'Bal d\'Afrique', season: 'Xuân / Hạ', seasonColor: 'green', retailPrice: '7.100.000đ', wholesalePrice: '5.500.000đ', stock: 19, status: 'Ẩn', img: '/images/San-Pham/SP13.jpg' },
-];
+// Convert StoreProduct → Product (admin table format)
+function toAdminProduct(p: StoreProduct): Product {
+  return {
+    id: p.id,
+    brand: p.brand,
+    name: p.name,
+    season: 'Tất cả mùa',
+    seasonColor: 'slate',
+    retailPrice: p.price.toLocaleString('vi-VN') + 'đ',
+    wholesalePrice: p.wholesalePrice.toLocaleString('vi-VN') + 'đ',
+    stock: p.stock,
+    status: p.status === 'active' ? 'Hiển thị' : 'Ẩn',
+    img: p.image,
+  };
+}
 
+// Convert Product (admin) → StoreProduct
+function toStoreProduct(p: Product, existing?: StoreProduct): StoreProduct {
+  const parsePrice = (s: string) => parseInt(s.replace(/[^\d]/g, '')) || 0;
+  return {
+    id: p.id,
+    brand: p.brand,
+    name: p.name,
+    price: existing?.price ?? parsePrice(p.retailPrice),
+    wholesalePrice: existing?.wholesalePrice ?? parsePrice(p.wholesalePrice),
+    volume: existing?.volume ?? '50ml',
+    image: p.img,
+    season: existing?.season ?? 'all',
+    gender: existing?.gender ?? 'Unisex',
+    stock: p.stock,
+    status: p.status === 'Hiển thị' ? 'active' : 'hidden',
+    badge: existing?.badge,
+    discount: existing?.discount,
+  };
+}
+
+const initialProducts: Product[] = getProducts().map(toAdminProduct);
 const TABS = ['Tất cả', 'Đang bán', 'Hết hàng', 'Bản nháp'];
 const PER_PAGE = 5;
 
@@ -44,8 +72,19 @@ export default function ProductsPage() {
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
+  // Sync toàn bộ products list xuống store mỗi khi thay đổi
+  useEffect(() => {
+    const storeProducts = getProducts();
+    const updated = products.map(p => {
+      const existing = storeProducts.find(s => s.id === p.id);
+      return toStoreProduct(p, existing);
+    });
+    saveProducts(updated);
+  }, [products]);
+
   const handleAdd = () => {
     if (!form.brand || !form.name) return;
+    const parsePrice = (s: string) => parseInt(s.replace(/[^\d]/g, '')) || 0;
     const newP: Product = {
       id: Date.now(), brand: form.brand, name: form.name,
       season: form.season, seasonColor: form.seasonColor,

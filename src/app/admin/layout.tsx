@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import AdminHeader from '@/components/admin/Header';
@@ -7,12 +7,22 @@ import AdminHeader from '@/components/admin/Header';
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    if (pathname === '/admin/login') return;
+    if (pathname === '/admin/login') {
+      setAuthorized(true);
+      return;
+    }
     const token = localStorage.getItem('admin_token');
-    if (!token) router.push('/login');
+    if (!token) {
+      router.push('/admin/login');
+    } else {
+      setAuthorized(true);
+    }
   }, [router, pathname]);
+
+  if (!authorized) return null;
 
   if (pathname === '/admin/login') return <>{children}</>;
 

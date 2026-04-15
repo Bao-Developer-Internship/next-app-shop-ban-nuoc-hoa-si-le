@@ -1,16 +1,22 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IOrderItem {
-  productId: mongoose.Types.ObjectId;
+  productId?: mongoose.Types.ObjectId;
   name: string;
   price: number;
   quantity: number;
   image?: string;
 }
 
+export interface IStatusHistory {
+  status: string;
+  note?: string;
+  changedAt: Date;
+}
+
 export interface IOrder extends Document {
   orderNumber: string;
-  customerId: mongoose.Types.ObjectId;
+  customerId?: mongoose.Types.ObjectId;
   customerName: string;
   customerEmail: string;
   customerPhone?: string;
@@ -24,6 +30,7 @@ export interface IOrder extends Document {
   paymentMethod: 'card' | 'momo' | 'vnpay' | 'bank_transfer';
   shippingAddress?: string;
   notes?: string;
+  statusHistory: IStatusHistory[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,11 +41,6 @@ const OrderSchema = new Schema<IOrder>(
       type: String,
       required: true,
       unique: true,
-    },
-    customerId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
     },
     customerName: {
       type: String,
@@ -94,10 +96,18 @@ const OrderSchema = new Schema<IOrder>(
     },
     shippingAddress: String,
     notes: String,
+    statusHistory: [
+      {
+        status: { type: String, required: true },
+        note: String,
+        changedAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
+export default (mongoose.models.Order as mongoose.Model<IOrder>) ||
+  mongoose.model<IOrder>('Order', OrderSchema);
